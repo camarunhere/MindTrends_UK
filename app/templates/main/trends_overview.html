@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Public Trend Summary{% endblock %}
+{% block content %}
+<section class="container py-5">
+  <div class="section-heading"><h1 class="h3 m-0">Public Trend Summary</h1><span class="rule"></span></div>
+  <p class="text-muted mb-4">A general, no-login overview of UK search interest over the last 12 months. Register for full parameter control, comparisons and exports.</p>
+
+  <div class="row g-4">
+    {% for s in summaries %}
+    <div class="col-lg-6">
+      <div class="glass-card fade-in">
+        <div class="d-flex justify-content-between align-items-start mb-2">
+          <div>
+            <h5 class="mb-0">{{ s.disorder.name }}</h5>
+            <span class="text-muted small">United Kingdom &middot; Last 12 months</span>
+          </div>
+          <span class="badge-source badge-{{ s.source }}">{{ s.source }}</span>
+        </div>
+        <div class="chart-frame chart-sm">
+          <canvas id="chart-{{ loop.index }}" data-dates='{{ s.dates|tojson }}' data-values='{{ s["values"]|tojson }}' data-label="{{ s.disorder.name }}"></canvas>
+        </div>
+        <div class="insight-card mt-3">
+          <span class="direction-badge direction-{{ s.insight.direction }}">{{ s.insight.direction }}</span>
+          <p class="small text-muted mb-0 mt-2">{{ s.insight.insight }}</p>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  {% if not current_user.is_authenticated %}
+  <div class="glass-card mt-5 text-center py-5">
+    <h4>Want deeper analysis?</h4>
+    <p class="text-muted">Register for free to filter by region, compare multiple disorders, and export your findings.</p>
+    <a href="{{ url_for('auth.register') }}" class="btn btn-gradient btn-lg mt-2">Create a Researcher Account</a>
+  </div>
+  {% endif %}
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll("canvas[data-dates]").forEach(function (canvas) {
+    const dates = JSON.parse(canvas.dataset.dates);
+    const values = JSON.parse(canvas.dataset.values);
+    MT.lineChart(canvas, [{ label: canvas.dataset.label, dates, values }]);
+  });
+});
+</script>
+{% endblock %}

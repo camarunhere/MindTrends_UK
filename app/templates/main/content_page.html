@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}{{ page.title }}{% endblock %}
+{% block content %}
+<section class="container py-5">
+  <div class="row g-4">
+    <div class="col-lg-3">
+      <div class="panel">
+        <div class="panel-title"><i class="bi bi-journal-text"></i> Study Info</div>
+        <div class="nav flex-column gap-1">
+          <a class="nav-link {{ 'active' if active=='about' }}" href="{{ url_for('main.about') }}"><i class="bi bi-info-circle me-2"></i>About the Study</a>
+          <a class="nav-link {{ 'active' if active=='methodology' }}" href="{{ url_for('main.methodology') }}"><i class="bi bi-diagram-3 me-2"></i>Methodology</a>
+          <a class="nav-link {{ 'active' if active=='faq' }}" href="{{ url_for('main.faq') }}"><i class="bi bi-patch-question me-2"></i>FAQ</a>
+          <a class="nav-link {{ 'active' if active=='resources' }}" href="{{ url_for('main.resources') }}"><i class="bi bi-life-preserver me-2"></i>Support Resources</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-9">
+      <div class="glass-card">
+        <h1 class="h3 mb-4">{{ page.title }}</h1>
+        <div class="content-body text-muted" style="white-space: pre-line; line-height: 1.75;">{{ page.body }}</div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

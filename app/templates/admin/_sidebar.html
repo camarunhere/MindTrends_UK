@@ -1,0 +1,13 @@
+<aside class="dash-sidebar">
+  <div class="nav flex-column">
+    <a class="nav-link {{ 'active' if request.endpoint=='admin.overview' }}" href="{{ url_for('admin.overview') }}"><i class="bi bi-speedometer2"></i> Overview</a>
+    <a class="nav-link {{ 'active' if request.endpoint and 'disorder' in request.endpoint }}" href="{{ url_for('admin.disorders') }}"><i class="bi bi-collection"></i> Disorders</a>
+    <a class="nav-link {{ 'active' if request.endpoint=='admin.content' }}" href="{{ url_for('admin.content') }}"><i class="bi bi-file-earmark-richtext"></i> Content</a>
+    <a class="nav-link {{ 'active' if request.endpoint=='admin.users' }}" href="{{ url_for('admin.users') }}"><i class="bi bi-people"></i> Users</a>
+    <a class="nav-link {{ 'active' if request.endpoint=='admin.parameters' }}" href="{{ url_for('admin.parameters') }}"><i class="bi bi-sliders2"></i> Search Parameters</a>
+    <a class="nav-link {{ 'active' if request.endpoint=='admin.logs' }}" href="{{ url_for('admin.logs') }}"><i class="bi bi-terminal"></i> System Logs</a>
+    <a class="nav-link {{ 'active' if request.endpoint=='admin.retrieval_settings' }}" href="{{ url_for('admin.retrieval_settings') }}"><i class="bi bi-cloud-arrow-down"></i> Retrieval Settings</a>
+  </div>
+  <hr class="footer-divider">
+  <a class="nav-link" href="{{ url_for('dashboard.home') }}"><i class="bi bi-box-arrow-left"></i> Back to Dashboard</a>
+</aside>

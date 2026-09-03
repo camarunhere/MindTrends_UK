@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Manage Users{% endblock %}
+{% block content %}
+<section class="container py-4">
+  <div class="dash-shell">
+    {% include "admin/_sidebar.html" %}
+    <div>
+      <h1 class="h3 mb-1">Manage Users</h1>
+      <p class="text-muted mb-4">View accounts, change roles, and activate or deactivate access.</p>
+
+      <div class="panel">
+        <div class="table-responsive">
+          <table class="table table-hover align-middle">
+            <thead><tr><th>User</th><th>Email</th><th>Institution</th><th>Role</th><th>Status</th><th class="text-end">Actions</th></tr></thead>
+            <tbody>
+              {% for u in users %}
+              <tr>
+                <td class="d-flex align-items-center gap-2">
+                  <span class="avatar-ring">{{ u.name[0]|upper if u.name else "?" }}</span>
+                  {{ u.name }}
+                </td>
+                <td class="text-muted">{{ u.email }}</td>
+                <td class="text-muted">{{ u.institution or "—" }}</td>
+                <td>
+                  <form method="POST" action="{{ url_for('admin.update_user_role', user_id=u.id) }}" class="d-flex align-items-center gap-2">
+                    <select name="role" class="form-select form-select-sm" style="width:auto;" onchange="this.form.submit()">
+                      <option value="researcher" {{ 'selected' if u.role=='researcher' }}>Researcher</option>
+                      <option value="admin" {{ 'selected' if u.role=='admin' }}>Admin</option>
+                    </select>
+                  </form>
+                </td>
+                <td>
+                  {% if u.is_active %}<span class="badge-source badge-live">active</span>{% else %}<span class="badge-source badge-error">deactivated</span>{% endif %}
+                </td>
+                <td class="text-end">
+                  <form method="POST" action="{{ url_for('admin.toggle_user_active', user_id=u.id) }}" class="d-inline">
+                    <button type="submit" class="btn btn-sm {{ 'btn-danger-soft' if u.is_active else 'btn-ghost' }}">
+                      {{ 'Deactivate' if u.is_active else 'Reactivate' }}
+                    </button>
+                  </form>
+                </td>
+              </tr>
+              {% else %}
+              <tr><td colspan="6" class="text-muted text-center py-3">No users yet.</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

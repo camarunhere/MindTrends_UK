@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Data Retrieval Settings{% endblock %}
+{% block content %}
+<section class="container py-4">
+  <div class="dash-shell">
+    {% include "admin/_sidebar.html" %}
+    <div>
+      <h1 class="h3 mb-1">Manage Data Retrieval Settings</h1>
+      <p class="text-muted mb-4">Google Trends configuration. Note: only settings this application actually controls are exposed here.</p>
+
+      <div class="panel">
+        <form method="POST">
+          <div class="mb-3">
+            <label class="form-label">Retrieval Mode</label>
+            <select name="mode" class="form-select">
+              <option value="auto" {{ 'selected' if settings.mode=='auto' }}>Auto (live, fallback to simulated)</option>
+              <option value="live" {{ 'selected' if settings.mode=='live' }}>Live only (no fallback)</option>
+              <option value="simulated" {{ 'selected' if settings.mode=='simulated' }}>Simulated only (demo mode)</option>
+            </select>
+            <div class="form-text text-muted">"Auto" is recommended: it uses real Google Trends data when available and clearly labels simulated data otherwise.</div>
+          </div>
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label class="form-label">Cache TTL (minutes)</label>
+              <input type="number" name="cache_ttl_minutes" class="form-control" value="{{ settings.cache_ttl_minutes }}" min="5">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Request Timeout (s)</label>
+              <input type="number" name="request_timeout" class="form-control" value="{{ settings.request_timeout }}" min="5">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Max Retries</label>
+              <input type="number" name="max_retries" class="form-control" value="{{ settings.max_retries }}" min="0">
+            </div>
+          </div>
+          <div class="mb-3 mt-3">
+            <label class="form-label">Backoff Between Retries (s)</label>
+            <input type="number" name="backoff_seconds" class="form-control" value="{{ settings.backoff_seconds }}" min="0" style="max-width:200px;">
+          </div>
+          <button type="submit" class="btn btn-gradient mt-2"><i class="bi bi-check2-circle me-2"></i>Save Settings</button>
+        </form>
+      </div>
+
+      <div class="disclaimer-strip">
+        <i class="bi bi-info-circle me-2"></i>
+        Google Trends has no official public API guaranteeing uptime or rate limits.
+        These settings control caching and fallback behaviour on our side only —
+        they do not configure Google Trends itself.
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

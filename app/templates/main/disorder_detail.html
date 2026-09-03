@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}{{ disorder.name }}{% endblock %}
+{% block content %}
+<section class="container py-5">
+  <a href="{{ url_for('main.disorders') }}" class="text-muted small"><i class="bi bi-arrow-left me-1"></i>Back to disorders</a>
+  <div class="glass-card mt-3">
+    <div class="d-flex align-items-center gap-3 mb-3">
+      <div class="icon-wrap m-0">🧩</div>
+      <div>
+        <h1 class="h3 mb-1">{{ disorder.name }}</h1>
+        <span class="badge-source badge-cache">{{ disorder.category }}</span>
+      </div>
+    </div>
+    <p class="text-muted" style="line-height: 1.75;">{{ disorder.description }}</p>
+    <div class="disclaimer-strip mt-3">
+      <i class="bi bi-shield-check me-2"></i>
+      This study examines Google search interest relating to {{ disorder.name.lower() }} — it does not measure clinical prevalence, diagnosis, or severity.
+    </div>
+    <div class="d-flex gap-3 mt-4">
+      {% if current_user.is_authenticated %}
+        <a href="{{ url_for('dashboard.home') }}?disorder={{ disorder._id }}" class="btn btn-gradient"><i class="bi bi-graph-up-arrow me-2"></i>Analyse in Dashboard</a>
+      {% else %}
+        <a href="{{ url_for('auth.register') }}" class="btn btn-gradient"><i class="bi bi-graph-up-arrow me-2"></i>Register to Analyse</a>
+      {% endif %}
+      <a href="{{ url_for('main.trends_overview') }}" class="btn btn-ghost">View Public Summary</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

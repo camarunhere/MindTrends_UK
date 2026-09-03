@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Manage Disorders{% endblock %}
+{% block content %}
+<section class="container py-4">
+  <div class="dash-shell">
+    {% include "admin/_sidebar.html" %}
+    <div>
+      <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <div>
+          <h1 class="h3 mb-1">Manage Mental Health Disorders</h1>
+          <p class="text-muted mb-0">Add, edit or remove disorders available to researchers.</p>
+        </div>
+        <a href="{{ url_for('admin.new_disorder') }}" class="btn btn-gradient"><i class="bi bi-plus-lg me-2"></i>Add Disorder</a>
+      </div>
+
+      <div class="panel">
+        <div class="table-responsive">
+          <table class="table table-hover align-middle">
+            <thead><tr><th>Name</th><th>Search Term</th><th>Category</th><th>Status</th><th></th></tr></thead>
+            <tbody>
+              {% for d in disorders %}
+              <tr>
+                <td class="fw-semibold">{{ d.name }}</td>
+                <td class="text-muted">{{ d.search_term }}</td>
+                <td><span class="badge-source badge-cache">{{ d.category }}</span></td>
+                <td>
+                  {% if d.active %}
+                  <span class="badge-source badge-live">active</span>
+                  {% else %}
+                  <span class="badge-source badge-error">inactive</span>
+                  {% endif %}
+                </td>
+                <td class="text-end">
+                  <a href="{{ url_for('admin.edit_disorder', disorder_id=d._id) }}" class="btn btn-sm btn-ghost">Edit</a>
+                  <form method="POST" action="{{ url_for('admin.delete_disorder', disorder_id=d._id) }}" class="d-inline" onsubmit="return confirm('Delete {{ d.name }}?');">
+                    <button type="submit" class="btn btn-sm btn-danger-soft">Delete</button>
+                  </form>
+                </td>
+              </tr>
+              {% else %}
+              <tr><td colspan="5" class="text-muted text-center py-3">No disorders yet.</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

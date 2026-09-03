@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Admin Overview{% endblock %}
+{% block content %}
+<section class="container py-4">
+  <div class="dash-shell">
+    {% include "admin/_sidebar.html" %}
+    <div>
+      <h1 class="h3 mb-1">Admin Console</h1>
+      <p class="text-muted mb-4">System management — content, users, parameters and monitoring.</p>
+
+      <div class="row g-3 mb-4">
+        <div class="col-6 col-lg-3">
+          <div class="stat-card">
+            <div class="stat-icon mb-2"><i class="bi bi-people"></i></div>
+            <div class="stat-value">{{ stats.users }}</div>
+            <div class="stat-label">Users</div>
+          </div>
+        </div>
+        <div class="col-6 col-lg-3">
+          <div class="stat-card">
+            <div class="stat-icon mb-2"><i class="bi bi-collection"></i></div>
+            <div class="stat-value">{{ stats.disorders }}</div>
+            <div class="stat-label">Disorders</div>
+          </div>
+        </div>
+        <div class="col-6 col-lg-3">
+          <div class="stat-card">
+            <div class="stat-icon mb-2"><i class="bi bi-bookmark-check"></i></div>
+            <div class="stat-value">{{ stats.saved_analyses }}</div>
+            <div class="stat-label">Saved Analyses</div>
+          </div>
+        </div>
+        <div class="col-6 col-lg-3">
+          <div class="stat-card">
+            <div class="stat-icon mb-2"><i class="bi bi-search"></i></div>
+            <div class="stat-value">{{ stats.queries }}</div>
+            <div class="stat-label">Trend Queries</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title"><i class="bi bi-terminal"></i> Recent Activity</div>
+        <div class="table-responsive">
+          <table class="table table-hover align-middle">
+            <thead><tr><th>Action</th><th>Actor</th><th>When</th></tr></thead>
+            <tbody>
+              {% for log in recent_logs %}
+              <tr>
+                <td><span class="badge-source badge-cache">{{ log.action }}</span></td>
+                <td class="text-muted">{{ log.actor or "system" }}</td>
+                <td class="text-muted small">{{ log.created_at.strftime("%d %b %Y, %H:%M") }} UTC</td>
+              </tr>
+              {% else %}
+              <tr><td colspan="3" class="text-muted text-center py-3">No activity recorded yet.</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <a href="{{ url_for('admin.logs') }}" class="small">View all logs <i class="bi bi-arrow-right"></i></a>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,42 @@
+<footer class="site-footer">
+  <div class="container">
+    <div class="row gy-4">
+      <div class="col-lg-4">
+        <div class="brand-text mb-2"><span class="brand-mark">🧠</span> MindTrends<span class="brand-accent">UK</span></div>
+        <p class="text-muted small mb-0">
+          An MSc research platform exploring UK online search interest for
+          mental health disorders using Google Trends. Search-interest data
+          only — not a diagnostic or clinical tool.
+        </p>
+      </div>
+      <div class="col-lg-2 col-6">
+        <h6 class="footer-heading">Explore</h6>
+        <ul class="list-unstyled footer-links">
+          <li><a href="{{ url_for('main.disorders') }}">Disorders</a></li>
+          <li><a href="{{ url_for('main.trends_overview') }}">Public Trends</a></li>
+          <li><a href="{{ url_for('main.methodology') }}">Methodology</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-2 col-6">
+        <h6 class="footer-heading">Study</h6>
+        <ul class="list-unstyled footer-links">
+          <li><a href="{{ url_for('main.about') }}">About</a></li>
+          <li><a href="{{ url_for('main.faq') }}">FAQ</a></li>
+          <li><a href="{{ url_for('main.resources') }}">Support Resources</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-4">
+        <h6 class="footer-heading">If you need support</h6>
+        <p class="text-muted small mb-0">
+          Samaritans: <strong>116 123</strong> (free, 24/7) &middot;
+          NHS: <strong>111</strong> &middot; Mind: <strong>0300 123 3393</strong>
+        </p>
+      </div>
+    </div>
+    <hr class="footer-divider">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+      <span class="text-muted small">&copy; {{ current_year }} MindTrends UK — MSc Research Project.</span>
+      <span class="text-muted small">Data source: Google Trends (relative search interest, not clinical prevalence).</span>
+    </div>
+  </div>
+</footer>

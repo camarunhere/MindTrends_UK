@@ -1,0 +1,37 @@
+<nav class="navbar navbar-expand-lg site-navbar sticky-top">
+  <div class="container">
+    <a class="navbar-brand" href="{{ url_for('main.home') }}">
+      <span class="brand-mark">🧠</span>
+      <span class="brand-text">MindTrends<span class="brand-accent">UK</span></span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="mainNav">
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('main.disorders') }}">Disorders</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('main.trends_overview') }}">Public Trends</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('main.methodology') }}">Methodology</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('main.about') }}">About</a></li>
+        {% if current_user.is_authenticated %}
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('dashboard.home') }}"><i class="bi bi-graph-up-arrow me-1"></i>Dashboard</a></li>
+        {% endif %}
+        {% if current_user.is_authenticated and current_user.is_admin() %}
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('admin.overview') }}"><i class="bi bi-shield-lock me-1"></i>Admin</a></li>
+        {% endif %}
+      </ul>
+      <div class="d-flex align-items-center gap-2 nav-actions">
+        {% if current_user.is_authenticated %}
+          <span class="user-chip">
+            <i class="bi bi-person-circle"></i> {{ current_user.name.split(' ')[0] }}
+            <span class="role-pill role-{{ current_user.role }}">{{ current_user.role }}</span>
+          </span>
+          <a href="{{ url_for('auth.logout') }}" class="btn btn-sm btn-outline-light">Logout</a>
+        {% else %}
+          <a href="{{ url_for('auth.login') }}" class="btn btn-sm btn-outline-light">Login</a>
+          <a href="{{ url_for('auth.register') }}" class="btn btn-sm btn-gradient">Register</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</nav>

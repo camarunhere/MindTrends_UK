@@ -1,0 +1,15 @@
+<aside class="dash-sidebar">
+  <div class="nav flex-column">
+    <a class="nav-link {{ 'active' if request.endpoint=='dashboard.home' }}" href="{{ url_for('dashboard.home') }}"><i class="bi bi-sliders"></i> Explore</a>
+    <a class="nav-link {{ 'active' if request.endpoint and request.endpoint.startswith('dashboard.history') }}" href="{{ url_for('dashboard.history') }}"><i class="bi bi-clock-history"></i> Saved Analyses</a>
+    <a class="nav-link" href="{{ url_for('main.disorders') }}"><i class="bi bi-info-circle"></i> Disorder Info</a>
+    {% if current_user.is_admin() %}
+    <a class="nav-link" href="{{ url_for('admin.overview') }}"><i class="bi bi-shield-lock"></i> Admin Console</a>
+    {% endif %}
+  </div>
+  <hr class="footer-divider">
+  <p class="text-muted small mb-0">
+    <i class="bi bi-lightbulb me-1"></i>
+    Tip: select 2+ disorders to compare them, or 2+ regions to compare geography.
+  </p>
+</aside>

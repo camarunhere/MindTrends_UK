@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% block title %}Research Dashboard{% endblock %}
+{% block content %}
+<section class="container py-4">
+  <div class="dash-shell">
+    {% include "dashboard/_sidebar.html" %}
+
+    <div>
+      <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <div>
+          <h1 class="h3 mb-1">Research Dashboard</h1>
+          <p class="text-muted mb-0">Select disorders, set parameters, and retrieve Google Trends data.</p>
+        </div>
+        <span class="user-chip"><i class="bi bi-person-circle"></i> {{ current_user.name }}</span>
+      </div>
+
+      <!-- Step 1: Select disorder(s) -->
+      <div class="panel">
+        <div class="panel-title"><span class="step-num">1</span> Select Mental Health Disorder(s)</div>
+        <div class="chip-select" id="disorderChips">
+          {% for d in disorders %}
+          <span class="chip" data-id="{{ d._id }}" data-name="{{ d.name }}"><span class="chip-dot"></span>{{ d.name }}</span>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Step 2: Set parameters -->
+      <div class="panel">
+        <div class="panel-title"><span class="step-num">2</span> Set Parameters</div>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">UK Region(s)</label>
+            <div class="chip-select" id="regionChips">
+              {% for r in regions %}
+              <span class="chip {{ 'active' if loop.first }}" data-code="{{ r.pytrends_geo }}"><span class="chip-dot"></span>{{ r.name }}</span>
+              {% endfor %}
+            </div>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label" for="timeframeSelect">Time Period</label>
+            <select id="timeframeSelect" class="form-select">
+              {% for tf in timeframes %}
+              <option value="{{ tf.value }}">{{ tf.label }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label" for="categorySelect">Category</label>
+            <select id="categorySelect" class="form-select">
+              <option value="0">All categories</option>
+              <option value="45">Health</option>
+              <option value="419">Medical Conditions</option>
+            </select>
+          </div>
+        </div>
+        <button id="retrieveBtn" class="btn btn-gradient mt-4"><i class="bi bi-cloud-download me-2"></i>Retrieve Google Trends Data</button>
+        <span id="retrieveStatus" class="text-muted small ms-3"></span>
+      </div>
+
+      <!-- Results -->
+      <div id="resultsWrap" class="d-none">
+        <div class="panel">
+          <div class="panel-title"><span class="step-num">3</span> Visualise Trends</div>
+          <div id="warningsWrap" class="mb-3"></div>
+          <div class="chart-frame">
+            <canvas id="mainChart"></canvas>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-title"><span class="step-num">4</span> Trend Analysis &amp; Comparison</div>
+          <p id="comparisonSummary" class="text-muted"></p>
+          <div class="table-responsive">
+            <table class="table table-hover align-middle">
+              <thead>
+                <tr><th>Series</th><th>Average</th><th>Start → End</th><th>Change</th><th>Peak</th><th>Direction</th></tr>
+              </thead>
+              <tbody id="analysisTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="panel d-flex flex-wrap gap-3 align-items-center">
+          <button id="saveBtn" class="btn btn-ghost"><i class="bi bi-bookmark-plus me-2"></i>Save Analysis</button>
+          <button id="exportCsvBtn" class="btn btn-ghost"><i class="bi bi-filetype-csv me-2"></i>Export CSV</button>
+          <button id="exportPdfBtn" class="btn btn-ghost"><i class="bi bi-filetype-pdf me-2"></i>Export PDF Report</button>
+        </div>
+      </div>
+
+      <div id="emptyState" class="empty-state">
+        <i class="bi bi-graph-up"></i>
+        <p class="mb-0">Select at least one disorder above, then click <strong>Retrieve Google Trends Data</strong> to begin.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Save modal -->
+<div class="modal fade" id="saveModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content p-2">
+      <div class="modal-header border-0">
+        <h5 class="modal-title">Save Analysis</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <label class="form-label">Title</label>
+        <input type="text" id="analysisTitle" class="form-control" placeholder="e.g. Depression vs Anxiety — UK, 2024">
+      </div>
+      <div class="modal-footer border-0">
+        <button type="button" class="btn btn-ghost" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" id="confirmSaveBtn" class="btn btn-gradient">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

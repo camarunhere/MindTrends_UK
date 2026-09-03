@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Mental Health Disorders{% endblock %}
+{% block content %}
+<section class="container py-5">
+  <div class="section-heading"><h1 class="h3 m-0">Mental Health Disorders in this Study</h1><span class="rule"></span></div>
+  <div class="disclaimer-strip mb-4">
+    <i class="bi bi-shield-check me-2"></i>
+    This section provides informational content only. It does not diagnose —
+    it describes what each term means and how search interest for it is studied.
+  </div>
+  <div class="row g-4">
+    {% for d in disorders %}
+    <div class="col-md-6 col-lg-4">
+      <a href="{{ url_for('main.disorder_detail', slug=d.slug) }}" class="text-decoration-none">
+        <div class="glass-card disorder-card card-hover h-100">
+          <div class="icon-wrap">🧩</div>
+          <h5 class="text-white">{{ d.name }}</h5>
+          <p class="text-muted small mb-0">{{ d.description[:130] }}{% if d.description|length > 130 %}…{% endif %}</p>
+          <span class="badge-source badge-cache mt-3 d-inline-block">{{ d.category }}</span>
+        </div>
+      </a>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

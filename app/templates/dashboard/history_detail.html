@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}{{ analysis.title }}{% endblock %}
+{% block content %}
+<section class="container py-4">
+  <div class="dash-shell">
+    {% include "dashboard/_sidebar.html" %}
+    <div>
+      <a href="{{ url_for('dashboard.history') }}" class="text-muted small"><i class="bi bi-arrow-left me-1"></i>Back to saved analyses</a>
+      <div class="d-flex justify-content-between align-items-start mt-2 mb-4 flex-wrap gap-2">
+        <h1 class="h3 mb-0">{{ analysis.title }}</h1>
+        <span class="text-muted small">Saved {{ analysis.created_at.strftime("%d %b %Y, %H:%M") }} UTC</span>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title"><i class="bi bi-graph-up"></i> Trends</div>
+        <div id="warningsWrap" class="mb-3">
+          {% for w in result.warnings %}
+          <div class="alert alert-warning py-2 px-3 mb-2"><i class="bi bi-exclamation-triangle me-2"></i>{{ w }}</div>
+          {% endfor %}
+        </div>
+        <div class="chart-frame">
+          <canvas id="mainChart" data-series='{{ result.series|tojson }}'></canvas>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title"><i class="bi bi-clipboard-data"></i> Analysis</div>
+        <p class="text-muted">{{ result.comparison.summary }}</p>
+        <div class="table-responsive">
+          <table class="table table-hover align-middle">
+            <thead>
+              <tr><th>Series</th><th>Average</th><th>Start → End</th><th>Change</th><th>Peak</th><th>Direction</th></tr>
+            </thead>
+            <tbody>
+              {% for a in result.comparison.analyses %}
+              <tr>
+                <td class="fw-semibold">{{ a.label }}</td>
+                <td>{{ a.average }}</td>
+                <td>{{ a.start_value }} → {{ a.end_value }}</td>
+                <td>{{ '+' if a.change_pct > 0 }}{{ a.change_pct }}%</td>
+                <td>{{ a.peak_value }} <span class="text-muted small">({{ a.peak_date or "—" }})</span></td>
+                <td><span class="direction-badge direction-{{ a.direction }}">{{ a.direction }}</span></td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <form method="POST" action="{{ url_for('dashboard.delete_analysis', analysis_id=analysis._id) }}" onsubmit="return confirm('Delete this saved analysis?');">
+        <button type="submit" class="btn btn-danger-soft"><i class="bi bi-trash3 me-2"></i>Delete this analysis</button>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const canvas = document.getElementById("mainChart");
+  const series = JSON.parse(canvas.dataset.series);
+  MT.lineChart(canvas, series);
+});
+</script>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Manage Content{% endblock %}
+{% block content %}
+<section class="container py-4">
+  <div class="dash-shell">
+    {% include "admin/_sidebar.html" %}
+    <div>
+      <h1 class="h3 mb-1">Manage Content</h1>
+      <p class="text-muted mb-4">Edit the public About, Methodology, FAQ and Resources pages.</p>
+
+      <div class="panel">
+        <ul class="nav nav-tabs border-0 mb-3" id="contentTabs">
+          {% for key, page in pages.items() %}
+          <li class="nav-item">
+            <button class="nav-link {{ 'active' if loop.first }}" data-bs-toggle="tab" data-bs-target="#tab-{{ key }}" type="button">{{ page.title }}</button>
+          </li>
+          {% endfor %}
+        </ul>
+        <div class="tab-content">
+          {% for key, page in pages.items() %}
+          <div class="tab-pane fade {{ 'show active' if loop.first }}" id="tab-{{ key }}">
+            <form method="POST" action="{{ url_for('admin.update_content', key=key) }}">
+              <div class="mb-3">
+                <label class="form-label">Title</label>
+                <input type="text" name="title" class="form-control" value="{{ page.title }}" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Body</label>
+                <textarea name="body" class="form-control" rows="10" required>{{ page.body }}</textarea>
+              </div>
+              <button type="submit" class="btn btn-gradient"><i class="bi bi-check2-circle me-2"></i>Save {{ page.title }}</button>
+            </form>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

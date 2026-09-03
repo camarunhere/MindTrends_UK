@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+{% block content %}
+<div class="auth-wrap">
+  <div class="glass-card auth-card fade-in">
+    <div class="text-center mb-4">
+      <div class="brand-mark" style="font-size:2rem;">🧠</div>
+      <h1 class="h4 mt-2 mb-1">Welcome back</h1>
+      <p class="text-muted small mb-0">Log in to your researcher account.</p>
+    </div>
+    <form method="POST" novalidate>
+      {{ form.hidden_tag() }}
+      <div class="mb-3">
+        <label class="form-label">{{ form.email.label.text }}</label>
+        {{ form.email(class_="form-control", placeholder="you@institution.ac.uk") }}
+        {% for e in form.email.errors %}<div class="text-danger small mt-1">{{ e }}</div>{% endfor %}
+      </div>
+      <div class="mb-3">
+        <label class="form-label">{{ form.password.label.text }}</label>
+        {{ form.password(class_="form-control", placeholder="••••••••") }}
+        {% for e in form.password.errors %}<div class="text-danger small mt-1">{{ e }}</div>{% endfor %}
+      </div>
+      <button type="submit" class="btn btn-gradient w-100 mt-2">Log In</button>
+    </form>
+    <p class="text-muted small text-center mt-4 mb-0">
+      No account yet? <a href="{{ url_for('auth.register') }}">Register as a researcher</a>
+    </p>
+  </div>
+</div>
+{% endblock %}
