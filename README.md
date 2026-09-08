@@ -72,6 +72,39 @@ Visit `http://localhost:5050`. On first run the app seeds six default
 disorders and one administrator account (from `.env`) automatically — no
 manual migration step needed.
 
+## Setting up on another machine
+
+To clone this project onto a new computer and get it running:
+
+1. **Install prerequisites** — Python 3.9+ and Git (on macOS: `xcode-select --install`
+   for command line tools, then `brew install python3` if needed).
+2. **Clone the repo**
+   ```bash
+   git clone https://github.com/<your-username>/MindTrends_UK.git
+   cd MindTrends_UK
+   ```
+3. **Create the virtualenv and install dependencies**
+   ```bash
+   python3 -m venv .venv
+   source .venv/bin/activate      # Windows: .venv\Scripts\activate
+   pip install -r requirements.txt
+   ```
+4. **Recreate `.env`** — this file is gitignored on purpose (it holds secrets), so
+   it is never pushed to GitHub and must be set up separately on each machine:
+   ```bash
+   cp .env.example .env
+   ```
+   Then edit `.env` and fill in real values (see the table in [Setup](#setup)).
+   Either point `MONGO_URI` at the same MongoDB Atlas cluster the other machine
+   uses (share the connection string out-of-band — password manager, AirDrop,
+   `scp` — never via git), or install MongoDB locally and use
+   `mongodb://localhost:27017`.
+5. **Run it**
+   ```bash
+   python run.py
+   ```
+   Visit `http://localhost:5050`.
+
 ## Notes for the dissertation
 
 - Google Trends provides **relative search interest (0–100)**, not an
